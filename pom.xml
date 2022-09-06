@@ -18,7 +18,7 @@
     <maven.compiler.release>17</maven.compiler.release>
     <javafx.version>17</javafx.version>
     <!-- <exec.mainClass>fully-qualified-class-name</exec.mainClass> -->
-    <exec.mainClass>com.mixedvictor.echowojava.Cli</exec.mainClass>
+    <exec.mainClass>com.mixedvictor.echowojava.Gui</exec.mainClass>
     <packaging>jar</packaging>
   </properties>
 
@@ -80,7 +80,7 @@
           <configuration>
             <archive>
               <manifest>
-                <mainClass>com.mixedvictor.echowojava.Cli</mainClass>
+                <mainClass>com.mixedvictor.echowojava.Gui</mainClass>
               </manifest>
             </archive>
             <descriptorRefs>
@@ -113,7 +113,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>com.mixedvictor.echowojava.Cli</mainClass>
+              <mainClass>com.mixedvictor.echowojava.Gui</mainClass>
             </manifest>
           </archive>
           <goals>
@@ -129,7 +129,7 @@
           <artifactId>javafx-maven-plugin</artifactId>
           <version>0.0.8</version>
           <configuration>
-            <mainClass>com.mixedvictor.echowojava.Cli</mainClass>
+            <mainClass>com.mixedvictor.echowojava.Gui</mainClass>
           </configuration>
         </plugin>
       </plugins>

@@ -1,0 +1,52 @@
+.root {
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-background: #29353b;
+    -fx-text-inner-color: #b7bbbd;
+    -fx-font-family: Ubuntu;
+}
+
+.text-area {
+    -fx-border: none;
+    -fx-background-color: transparent;
+    -fx-resize: none;
+    -fx-outline: none;
+}
+
+.text-area .content {
+    -fx-border: solid #1e272b;
+    -fx-border-radius: 5px;
+    -fx-background-color: #222d32;
+}
+
+.scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #b7bbbd;
+}
+
+.scroll-bar:vertical .thumb:hover               { -fx-background-color: #00bcd4;   }
+.scroll-bar:vertical .thumb:pressed             { -fx-background-color: #007890;   }
+
+.scroll-bar:vertical .increment-arrow,
+.scroll-bar:vertical .decrement-arrow           { -fx-background-color: #b7bbbd;   }
+
+.scroll-bar:vertical .increment-arrow:hover,
+.scroll-bar:vertical .decrement-arrow:hover     { -fx-background-color: #00bcd4;   }
+
+.scroll-bar:vertical .increment-arrow:pressed,
+.scroll-bar:vertical .decrement-arrow:pressed   { -fx-background-color: #007890;   }
+
+.scroll-bar:vertical .increment-button,
+.scroll-bar:vertical .decrement-button          { -fx-background-color: transparent; }
+
+.button {
+    -fx-background-insets: none; /* This removes the ugly shadow when clicked */
+    -fx-background-color: #1e272b;
+    -fx-text-fill: #b7bbbd;
+}
+
+.button:hover   { -fx-background-color: #009ac2; -fx-text-fill: white;  }
+.button:pressed { -fx-background-color: #007890; -fx-text-fill: white;  }

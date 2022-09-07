@@ -52,11 +52,12 @@ public class Cli {
       // System.out.println(words.addUwus(words.uwuifyString(myString)));
 
       options.addOption(new Option("e", "echo", true, "echo something"));
+      options.addOption(new Option("h", "help", false, "show help"));
       options.addOption(new Option("g", "gui", false, "use gui"));
       
       CommandLineParser parser = new DefaultParser();
-      args=new String[]{"-g"};
- 
+      // args = new String[]{"-g"};
+
       CommandLine cmd = null;
 
       try {
@@ -69,11 +70,18 @@ public class Cli {
          System.out.println(cmd.getOptionValue("block-size"));
       }
 
-      if (cmd.getArgs() == null) { formatter.printHelp("echowoJava", options); }
+      if (
+         cmd.hasOption("h") == true  || 
+         cmd.hasOption("e") == false &&
+         cmd.hasOption("g") == false
+         ) {
+         formatter.printHelp("echowoJava", options); 
+      }
 
       if (cmd.hasOption("g")) {
          Gui.main(null);
       }
+
       else if (cmd.hasOption("e")) {
          System.out.println(words.uwusOut(cmd.getOptionValues("e")[0]));
       }

@@ -20,7 +20,7 @@ import java.lang.Math;
 
 public class Words {
     public static final String JSON_PATH = "words.json";
-    public static final String CSS_PATH = "gui.css";
+    public static final String DEFAULT_CSS_FILE = "css/gui.css";
 
     private static int genInt(int min, int max) {
         return (int) ((Math.random() * (max - min)) + min);

@@ -16,12 +16,12 @@
 
 package com.mixedvictor.echowojava;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.cli.*;
+import org.apache.commons.io.IOUtils;
 
 import com.google.gson.Gson;
 
@@ -37,7 +37,7 @@ public class Cli {
       try {
          br = new BufferedReader(new InputStreamReader(fileJson.openStream()));
       } catch (IOException e) {
-         e.printStackTrace();
+         System.out.println("IOException");
       }
 
       Words words = gson.fromJson(br, Words.class);
@@ -54,6 +54,7 @@ public class Cli {
       options.addOption(new Option("e", "echo", true, "echo something"));
       options.addOption(new Option("h", "help", false, "show help"));
       options.addOption(new Option("g", "gui", false, "use gui"));
+      options.addOption(new Option("o", "open", true, "open file"));
       
       CommandLineParser parser = new DefaultParser();
       // args = new String[]{"-g"};
@@ -63,7 +64,7 @@ public class Cli {
       try {
          cmd = parser.parse(options, args);
       } catch (ParseException e1) {
-         e1.printStackTrace();
+         System.out.println("ParseException");
       }
 
       if (cmd.hasOption("block-size")) {
@@ -73,13 +74,28 @@ public class Cli {
       if (
          cmd.hasOption("h") == true  || 
          cmd.hasOption("e") == false &&
-         cmd.hasOption("g") == false
+         cmd.hasOption("g") == false &&
+         cmd.hasOption("o") == false
          ) {
          formatter.printHelp("echowoJava", options); 
       }
 
       if (cmd.hasOption("g")) {
          Gui.main(null);
+      }
+
+      if (cmd.hasOption("o")) {
+         File f = new File(cmd.getOptionValues("o")[0]);
+         FileInputStream fileOp = null;
+         String fBrText = null;
+
+         try {
+            fileOp = new FileInputStream(f);
+            fBrText = IOUtils.toString(fileOp, StandardCharsets.UTF_8);
+            System.out.println(words.uwusOut(fBrText));
+         } catch (IOException io) {
+            System.out.println("IOException");
+         }
       }
 
       else if (cmd.hasOption("e")) {

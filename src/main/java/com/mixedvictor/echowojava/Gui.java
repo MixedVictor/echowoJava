@@ -22,19 +22,17 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URL;
-
+import java.nio.charset.StandardCharsets;
+import org.apache.commons.io.IOUtils;
 import com.google.gson.Gson;
 
  
@@ -50,24 +48,52 @@ public class Gui extends Application {
 
         VBox rootVbox = new VBox(7);
         HBox rootHbox = new HBox(7);
+
+        FileChooser oFileDialog = new FileChooser();
+        oFileDialog.setTitle("Open Text File");
+
+        FileChooser oCssDialog = new FileChooser();
+        oCssDialog.setTitle("Open CSS File");
+        oCssDialog.setSelectedExtensionFilter(new FileChooser.ExtensionFilter(
+        "Cascading Style Sheets (CSS)", "css"
+        ));
+
+        MenuBar mainBar = new MenuBar();
+
+        Menu mFile = new Menu("File");
+        MenuItem oFile = new MenuItem("Open");
+
+        Menu oConf = new Menu("Options");
+        Menu cTheme = new Menu("Theme");
+
+        MenuItem oCssFile = new MenuItem("Open");
+        MenuItem defaultTheme = new MenuItem("Default");
+        MenuItem adaptaTheme = new MenuItem("AdaptaFX");
+
+        SeparatorMenuItem menuSeparator = new SeparatorMenuItem();
+
         Clipboard clip = Clipboard.getSystemClipboard();
         ClipboardContent clipContent = new ClipboardContent();
+
         TextArea inputArea = new TextArea();
         TextArea outputArea = new TextArea();
+
         Button refButton = new Button();
         Button copyButton = new Button();
+        Button pasteButton = new Button();
 
         Gson gson = new Gson();
-        URL fileJson = Cli.class.getClassLoader().getResource(Words.JSON_PATH);
-        BufferedReader br = null;
+        URL fileJson = Gui.class.getClassLoader().getResource(Words.JSON_PATH);
+
+        BufferedReader jBr = null;
 
         try {
-            br = new BufferedReader(new InputStreamReader(fileJson.openStream()));
+            jBr = new BufferedReader(new InputStreamReader(fileJson.openStream()));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        Words words = gson.fromJson(br, Words.class);        
+        Words words = gson.fromJson(jBr, Words.class);        
 
         inputArea.setText("Put something here");
         inputArea.setWrapText(true);
@@ -76,7 +102,49 @@ public class Gui extends Application {
         rootHbox.setAlignment(Pos.CENTER);
         refButton.setText("UwUify");
         copyButton.setText("Copy");
+        pasteButton.setText("Paste");
 
+        Scene scene = new Scene(rootVbox, 426, 240);
+
+        // Open text file
+        oFile.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent event) {
+                File openedFile = oFileDialog.showOpenDialog(primaryStage);
+                FileInputStream fileOp = null;
+                String fBrText = null;
+
+                if (openedFile != null) {
+                    try {
+                        fileOp = new FileInputStream(openedFile);
+                        fBrText = IOUtils.toString(fileOp, StandardCharsets.UTF_8);
+                        inputArea.setText(fBrText);
+                        outputArea.setText(fBrText);
+                    } catch (IOException io) {
+                        System.out.println("IOException");
+                    }
+                }
+            }
+        });
+
+        // Open custom CSS theme
+        oCssFile.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent event) {
+                File openedFile = oCssDialog.showOpenDialog(primaryStage);
+                try {
+                    scene.getStylesheets().add("file:///" + openedFile.toString());
+                } catch (NullPointerException e) {
+                    System.out.println("NullPointerException: no file opened");
+                }
+            }
+        });
+
+        defaultTheme.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent event) {
+                scene.getStylesheets().clear();
+            }
+        });
+
+        // UwUifies the text
         refButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -84,6 +152,7 @@ public class Gui extends Application {
             }
         });
 
+        // Copies the text
         copyButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -91,21 +160,45 @@ public class Gui extends Application {
                 clip.setContent(clipContent);
             }
         });
+
+        // Pastes the text
+        pasteButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if (clip.hasString()) {
+                    inputArea.setText(clip.getString());
+                    outputArea.setText(words.uwusOut(clip.getString()));
+                }
+            }
+        });
         
+        rootVbox.getChildren().add(mainBar);
+        mainBar.getMenus().addAll(mFile, oConf);
+        mFile.getItems().addAll(oFile);
+
+        oConf.getItems().addAll(cTheme);
+        cTheme.getItems().addAll(defaultTheme, adaptaTheme, menuSeparator, oCssFile);
+
         rootVbox.getChildren().add(inputArea);
         VBox.setMargin(inputArea, new Insets(5, 5, 1, 5));
 
         rootVbox.getChildren().addAll(rootHbox);
-        rootHbox.getChildren().addAll(refButton, copyButton);
+        rootHbox.getChildren().addAll(refButton, copyButton, pasteButton);
         HBox.setMargin(refButton, new Insets(1, 1, 1, 5));
         HBox.setMargin(copyButton, new Insets(1, 1, 1, 5));
+        HBox.setMargin(pasteButton, new Insets(1, 1, 1, 5));
 
         rootVbox.getChildren().add(outputArea);
         VBox.setMargin(outputArea, new Insets(1, 5, 5, 5));
         
-        Scene scene = new Scene(rootVbox, 426, 240);
+        URL fileCss = Gui.class.getClassLoader().getResource(Words.DEFAULT_CSS_FILE);
 
-        URL fileCss = Cli.class.getClassLoader().getResource(Words.CSS_PATH);
+        adaptaTheme.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent event) {
+                scene.getStylesheets().add(fileCss.toString());
+            }
+        });
+
         scene.getStylesheets().add(fileCss.toString());
 
         primaryStage.setScene(scene);

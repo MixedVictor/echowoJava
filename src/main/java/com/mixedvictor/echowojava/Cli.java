@@ -31,7 +31,7 @@ public class Cli {
       final Options options = new Options();      
 
       Gson gson = new Gson();
-      URL fileJson = Cli.class.getClassLoader().getResource(Words.JSON_PATH);
+      URL fileJson = Cli.class.getClassLoader().getResource("words.json");
       BufferedReader br = null;
 
       try {
@@ -80,9 +80,9 @@ public class Cli {
          formatter.printHelp("echowoJava", options); 
       }
 
-      if (cmd.hasOption("g")) {
-         Gui.main(null);
-      }
+//      if (cmd.hasOption("g")) {
+//         Gui.main(null);
+//      }
 
       if (cmd.hasOption("o")) {
          File f = new File(cmd.getOptionValues("o")[0]);

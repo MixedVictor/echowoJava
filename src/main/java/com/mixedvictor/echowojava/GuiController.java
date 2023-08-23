@@ -35,37 +35,35 @@ import org.apache.commons.io.IOUtils;
 
 public class GuiController {
     @FXML
-    FileChooser openDialog;
+    private FileChooser openDialog;
     @FXML
-    FileChooser saveDialog;
+    private FileChooser saveDialog;
     @FXML
-    Clipboard clip;
+    private final Clipboard clip = Clipboard.getSystemClipboard();
     @FXML
-    ClipboardContent clipContent;
+    private TextArea editArea;
     @FXML
-    TextArea editArea;
-    @FXML
-    TextArea translateArea;
+    private TextArea translateArea;
 
-    Gson gson;
-    Words words;
+    private Words words;
 
     private static final Logger logger = Logger.getLogger(GuiController.class.getName());
 
     @FXML
     private void initialize() {
-        gson = new Gson();
         URL fileJson = getClass().getClassLoader().getResource("words.json");
         if (fileJson != null) {
             try (BufferedReader jBr = new BufferedReader(
                     new InputStreamReader(fileJson.openStream()))) {
-                words = gson.fromJson(jBr, Words.class);
+                words = new Gson().fromJson(jBr, Words.class);
             } catch (IOException e) {
                 logger.log(Level.SEVERE, "Error reading 'words.json'", e);
             }
         } else {
             logger.log(Level.WARNING, "Resource 'words.json' not found");
         }
+        // Translate the default text from editBox.
+        handleTranslate();
     }
 
     @FXML
@@ -102,6 +100,7 @@ public class GuiController {
 
     @FXML
     private void handleCopy() {
+        ClipboardContent clipContent = new ClipboardContent();
         clipContent.putString(translateArea.getText());
         clip.setContent(clipContent);
     }
@@ -110,7 +109,8 @@ public class GuiController {
     private void handlePaste() {
         if (clip.hasString()) {
             editArea.setText(clip.getString());
-            translateArea.setText(words.uwusOut(clip.getString()));
+        } else {
+            logger.log(Level.FINEST, "No clipboard string found");
         }
     }
 

@@ -1,4 +1,4 @@
-/* Copyright (C) 2022  MixedVictor
+/* Copyright (C) 2023  MixedVictor
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,19 +19,19 @@ package com.mixedvictor.echowojava;
 
 import java.io.*;
 import java.net.URL;
-import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import org.apache.commons.cli.*;
 import com.google.gson.Gson;
 
 public class Cli {
-    public static Utils words;
+    private static Utils words;
     public static void main(String[] args) {
         Options options = new Options();
-        Logger logger = Logger.getLogger(Utils.getClassLoader().getName());
+        Logger logger = Logger.getLogger(Cli.class.getName());
 
-        URL fileJson = Utils.getClassLoader().getResource("words.json");
+        URL fileJson = Cli.class.getClassLoader().getResource("words.json");
         if (fileJson != null) {
             try (BufferedReader jBr = new BufferedReader(
                     new InputStreamReader(fileJson.openStream()))) {
@@ -39,10 +39,7 @@ public class Cli {
             } catch (IOException e) {
                 logger.log(Level.SEVERE, "Error reading 'words.json'", e);
             }
-        } else {
-            logger.log(Level.WARNING, "Resource 'words.json' not found");
         }
-
         options.addOption(new Option("h", "help", false, "show help"));
         options.addOption(new Option("e", "echo", true, "echo something"));
 
@@ -62,14 +59,12 @@ public class Cli {
         if (cmd.hasOption("h")) {
             new HelpFormatter().printHelp("echowoJava", options);
         } else if (cmd.hasOption("e")) {
-            if (words != null) {
-                System.out.println(words.uwusOut(cmd.getOptionValue("e")));
-            } else {
-                logger.log(Level.WARNING, "Words not loaded");
-            }
-        } else if (args.length == 0) {
-            System.out.println("If you want to use CLI," +
-                                "type -h in the arguments to see the commands"
+            System.out.println(
+                    words.uwusAdd(words.uwuifyString(cmd.getOptionValue("e")))
+            );
+        } else {
+            System.out.println("If you want to use CLI, " +
+                    "type -h in the arguments to see the commands"
             );
             Gui.main(null);
         }

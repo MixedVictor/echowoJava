@@ -1,7 +1,7 @@
 # echowoJava
 joseafga's echowo, now in Java with UI, also comes with CLI.
 
-**Compile:** `mvn clean compile package assembly:single`<br>
+**Compile:** `mvn clean compile package assembly:single exec:java`<br>
 **Arguments:**
 ```
 usage: echowoJava 

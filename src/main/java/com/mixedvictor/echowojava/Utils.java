@@ -1,4 +1,4 @@
-/* Copyright (C) 2022  MixedVictor
+/* Copyright (C) 2023  MixedVictor
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,31 +20,23 @@ package com.mixedvictor.echowojava;
 import java.lang.Math;
 
 public class Utils {
-    private static int genInt(int min, int max) {
-        return (int) ((Math.random() * (max - min)) + min);
+    private int genInt(int max) {
+        return (int) (Math.random() * (max));
     }
 
     public String[] uwus;
-    public String[] standard;
-    public String[] uwuify;
+    public String[] common;
+    public String[] uwuified;
 
-    public static ClassLoader getClassLoader() {
-        return Utils.class.getClassLoader();
-    }
-
-    public String addUwus(String str) {
-        String s = " ";
-        String randUwuF = uwus[genInt(0, uwus.length)];
-        String randUwuS = uwus[genInt(0, uwus.length)];
-        return(randUwuF + s + str + s + randUwuS);
+    public String uwusAdd(String str) {
+        return (uwus[genInt(uwus.length)] + " " +
+                str + " " + uwus[genInt(uwus.length)]);
     }
 
     public String uwuifyString(String str) {
-        for (int i = 0; i < standard.length; i++) {
-            str = str.replace(standard[i], uwuify[i]);
+        for (int i = 0; i < common.length; i++) {
+            str = str.replace(common[i], uwuified[i]);
         }
-        return(str);
+        return (str);
     }
-    
-    public String uwusOut(String str) { return(addUwus(uwuifyString(str))); }
 }

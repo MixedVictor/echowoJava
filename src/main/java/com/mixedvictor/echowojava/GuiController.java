@@ -1,4 +1,4 @@
-/* Copyright (C) 2022  MixedVictor
+/* Copyright (C) 2023  MixedVictor
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,22 +39,26 @@ public class GuiController {
     @FXML
     private TextArea translateArea;
 
+    private static Utils words;
+
+    // Some settings stuff below.
+    private static boolean uwusAdd = true;
+
     private static final Clipboard clip = Clipboard.getSystemClipboard();
     private static final FileChooser dialog = new FileChooser();
     private static final Logger logger = Logger.getLogger(
             GuiController.class.getName());
+
     @FXML
     private void initialize() {
-        URL fileJson = getClass().getClassLoader().getResource("words.json");
-        if (fileJson != null) {
+        URL jsonFile = getClass().getClassLoader().getResource("words.json");
+        if (jsonFile != null) {
             try (BufferedReader jBr = new BufferedReader(
-                    new InputStreamReader(fileJson.openStream()))) {
-                Cli.words = new Gson().fromJson(jBr, Utils.class);
+                    new InputStreamReader(jsonFile.openStream()))) {
+                words = new Gson().fromJson(jBr, Utils.class);
             } catch (IOException e) {
                 logger.log(Level.SEVERE, "Error reading 'words.json'", e);
             }
-        } else {
-            logger.log(Level.WARNING, "Resource 'words.json' not found");
         }
         // Translate the default text from editBox.
         handleTranslate();
@@ -89,14 +93,11 @@ public class GuiController {
                 .getOwnerNode()
                 .getScene()
                 .getWindow());
-        String bufferText;
-
         if (openedFile != null) {
             try {
-                bufferText = IOUtils.toString(
+                editArea.setText(IOUtils.toString(
                         new FileInputStream(openedFile), StandardCharsets.UTF_8
-                );
-                editArea.setText(bufferText);
+                ));
             } catch (IOException e) {
                 logger.log(Level.WARNING, "Error reading file", e);
             }
@@ -107,7 +108,15 @@ public class GuiController {
 
     @FXML
     private void handleTranslate() {
-        translateArea.setText((Cli.words.uwusOut(editArea.getText())));
+        if (uwusAdd) {
+            translateArea.setText(
+                    words.uwusAdd(words.uwuifyString(editArea.getText()))
+            );
+        } else {
+            translateArea.setText(
+                    words.uwuifyString(editArea.getText())
+            );
+        }
     }
 
     @FXML
@@ -124,6 +133,11 @@ public class GuiController {
         } else {
             logger.log(Level.FINEST, "No clipboard string found");
         }
+    }
+
+    @FXML
+    private void handleAddUwus() {
+        uwusAdd = !uwusAdd;
     }
 
     @FXML

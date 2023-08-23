@@ -14,7 +14,7 @@
   <!-- Project properties -->
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <exec.mainClass>com.mixedvictor.echowojava.Gui</exec.mainClass>
+    <exec.mainClass>com.mixedvictor.echowojava.Cli</exec.mainClass>
     <packaging>jar</packaging>
   </properties>
 
@@ -68,7 +68,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>com.mixedvictor.echowojava.Gui</mainClass>
+              <mainClass>com.mixedvictor.echowojava.Cli</mainClass>
             </manifest>
           </archive>
           <excludes>
@@ -81,7 +81,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>com.mixedvictor.echowojava.Gui</mainClass>
+              <mainClass>com.mixedvictor.echowojava.Cli</mainClass>
             </manifest>
           </archive>
           <descriptorRefs>
@@ -102,7 +102,7 @@
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-maven-plugin</artifactId>
         <configuration>
-          <mainClass>com.mixedvictor.echowojava.Gui</mainClass>
+          <mainClass>com.mixedvictor.echowojava.Cli</mainClass>
         </configuration>
       </plugin>
     </plugins>

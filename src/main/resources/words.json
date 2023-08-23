@@ -9,10 +9,9 @@
         "huoooh..." ,
         "nyu..."    ,
         ":3"        ,
-        "rawr!"    
+        "rawr!"
     ],
-
-    "standard": [
+    "common": [
         "ll"    ,"Ll",      "lL",   "LL",
         "orr"   ,"Orr",     "ORR",
         "or"    ,"Or",      "oR",   "OR",
@@ -21,15 +20,14 @@
         "nan"   ,"Nan",     "NAN",
         "ma"    ,"Ma",      "MA",
         "mam"   ,"Mam",     "MAM",
-        "pl"    ,"Pl",      "PL",   
+        "pl"    ,"Pl",      "PL",
         "tr"    ,"Tr",      "TR",
         "dr"    ,"Dw",      "DW",
         "ph"    ,"Ph",      "PH",
         "pr"    ,"Pw",      "PW",
-        "wewe"  ,"Wewe",    "WEWE"    
+        "wewe"  ,"Wewe",    "WEWE"
     ],
-
-    "uwuify": [
+    "uwuified": [
         "ww"    ,"Ww",      "wW",   "WW",
         "oww"   ,"Oww",     "OWW",
         "ow"    ,"Ow",      "oW",   "OW",

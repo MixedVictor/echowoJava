@@ -17,23 +17,26 @@
 
 package com.mixedvictor.echowojava;
 
-import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-import javafx.fxml.FXMLLoader;
+import java.lang.Math;
 
-public class Gui extends Application {
-    @Override
-    public void start(Stage stage) throws Exception {
-        stage.setTitle("echowoJava");
-        stage.setScene(new Scene(new FXMLLoader(
-                getClass().getClassLoader().getResource("main.fxml")).load())
-        );
-        stage.setResizable(false);
-        stage.show();
+public class Utils {
+    private int genInt(int max) {
+        return (int) (Math.random() * (max));
     }
 
-    public static void main(String[] args) {
-        launch(args);
+    public String[] uwus;
+    public String[] common;
+    public String[] uwuified;
+
+    public String uwusAdd(String str) {
+        return (uwus[genInt(uwus.length)] + " " +
+                str + " " + uwus[genInt(uwus.length)]);
+    }
+
+    public String uwuifyString(String str) {
+        for (int i = 0; i < common.length; i++) {
+            str = str.replace(common[i], uwuified[i]);
+        }
+        return (str);
     }
 }

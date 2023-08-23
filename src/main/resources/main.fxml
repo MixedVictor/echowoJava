@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.mixedvictor.echowojava.GuiController"
+      prefHeight="360.0" prefWidth="640.0">
+    <MenuBar>
+        <Menu text="File">
+            <MenuItem text="Save" onAction="#handleSaveFile"/>
+            <MenuItem text="Open" onAction="#handleOpenFile"/>
+            <SeparatorMenuItem/>
+            <MenuItem text="Exit" onAction="#handleExit"/>
+        </Menu>
+        <Menu text="Edit">
+            <MenuItem text="Translate" onAction="#handleTranslate"/>
+            <SeparatorMenuItem/>
+            <MenuItem text="Copy" onAction="#handleCopy"/>
+            <MenuItem text="Paste" onAction="#handlePaste"/>
+        </Menu>
+        <Menu text="Settings">
+            <!-- TODO: develop settings menu.                               -->
+            <!-- <MenuItem text="Settings" onAction="#handleSettings" />    -->
+            <!-- <SeparatorMenuItem/>                                       -->
+            <!-- Some quick settings.                                       -->
+            <CheckMenuItem text="Add uwu's" onAction="#handleAddUwus" selected="true"/>
+        </Menu>
+    </MenuBar>
+    <VBox>
+        <padding>
+            <Insets top="5" right="5" bottom="5" left="5"/>
+        </padding>
+        <TextArea fx:id="editArea" text="Put something here." wrapText="true"/>
+        <Separator/>
+        <TextArea fx:id="translateArea" wrapText="true"/>
+    </VBox>
+</VBox>

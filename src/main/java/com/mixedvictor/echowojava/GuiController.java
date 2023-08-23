@@ -28,35 +28,24 @@ import javafx.event.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.input.*;
-import javafx.scene.layout.*;
 import javafx.stage.*;
 
 import com.google.gson.Gson;
 import org.apache.commons.io.IOUtils;
 
 public class GuiController {
-    //    @FXML
-//    VBox rootVbox;
-    @FXML
-    HBox rootHbox;
     @FXML
     FileChooser openDialog;
-    //    @FXML
-//    FileChooser saveDialog;
+    @FXML
+    FileChooser saveDialog;
     @FXML
     Clipboard clip;
     @FXML
     ClipboardContent clipContent;
     @FXML
-    Button translateButton;
+    TextArea editArea;
     @FXML
-    Button copyButton;
-    @FXML
-    Button pasteButton;
-    @FXML
-    TextArea editBox;
-    @FXML
-    TextArea translateBox;
+    TextArea translateArea;
 
     Gson gson;
     Words words;
@@ -96,30 +85,32 @@ public class GuiController {
                 fBrText = IOUtils.toString(
                         new FileInputStream(openedFile), StandardCharsets.UTF_8
                 );
-                editBox.setText(fBrText);
-                translateBox.setText(fBrText);
+                editArea.setText(fBrText);
+                translateArea.setText(fBrText);
             } catch (IOException e) {
-                System.out.println("IOException: file not found.");
+                logger.log(Level.WARNING, "Error reading file", e);
             }
+        } else {
+            logger.log(Level.WARNING, "File not found");
         }
     }
 
     @FXML
     private void handleTranslate() {
-        translateBox.setText((words.uwusOut(editBox.getText())));
+        translateArea.setText((words.uwusOut(editArea.getText())));
     }
 
     @FXML
     private void handleCopy() {
-        clipContent.putString(translateBox.getText());
+        clipContent.putString(translateArea.getText());
         clip.setContent(clipContent);
     }
 
     @FXML
     private void handlePaste() {
         if (clip.hasString()) {
-            editBox.setText(clip.getString());
-            translateBox.setText(words.uwusOut(clip.getString()));
+            editArea.setText(clip.getString());
+            translateArea.setText(words.uwusOut(clip.getString()));
         }
     }
 

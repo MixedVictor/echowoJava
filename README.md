@@ -1,10 +1,10 @@
 # echowoJava
 joseafga's echowo, now in Java with UI, also comes with CLI.
 
-**Compile:** `mvn clean compile package assembly:single exec:java`<br>
+**Compile:** `mvn clean package`<br>
 **Arguments:**
 ```
-usage: echowoJava 
--e,--echo <arg>   echo something
--h,--help         show this help
+usage: echowoJava <string>
+ -h,--help      show help
+    --uwuless   do not include uwu's
 ```

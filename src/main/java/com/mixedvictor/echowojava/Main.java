@@ -7,20 +7,22 @@
 
 package com.mixedvictor.echowojava;
 
+import ch.bailu.gtk.adw.Application;
+import ch.bailu.gtk.gio.ApplicationFlags;
+import ch.bailu.gtk.type.Strs;
+import ch.bailu.gtk.type.exception.AllocationError;
+import com.mixedvictor.echowojava.Gui.Builder;
 import org.apache.commons.cli.*;
 
+import java.io.IOException;
 import java.util.logging.Level;
 
 public class Main {
-
     private static void printHelp(HelpFormatter formatter, Options options) {
         formatter.printHelp("echowoJava <string>", options);
     }
 
-    public static void main(String[] args) {
-        Utils words = new Utils();
-        words.loadDefaultJson();
-
+    public static void main(String[] args) throws IOException {
         Options options = new Options();
 
         options.addOption(new Option("h", "help", false, "show help"));
@@ -37,6 +39,7 @@ public class Main {
             if (cmd.hasOption("h")) {
                 printHelp(formatter, options);
             } else if (args.length != 0) {
+                Words words = new Words();
                 for (String inputString : cmd.getArgs()) {
                     if (cmd.hasOption("uwuless")) {
                         System.out.println(words.uwuifyString(inputString));
@@ -45,11 +48,19 @@ public class Main {
                     }
                 }
             } else {
-                System.out.println("If you want to use CLI, type -h in the arguments to see the commands");
-                Gui.main(args);
+                final Application app = new Application("com.mixedvictor.echowoJava", ApplicationFlags.NON_UNIQUE);
+                app.onActivate(() -> {
+                    try {
+                        new Builder(app);
+                    } catch (AllocationError | IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+                app.run(args.length, new Strs(args));
+                app.unref();
             }
-        } catch (ParseException exp) {
-            GlobalLogger.LOGGER.log(Level.WARNING, "Parsing error", exp);
+        } catch (ParseException e) {
+            GlobalLogger.LOGGER.log(Level.WARNING, "Parsing error", e);
             printHelp(formatter, options);
         }
     }

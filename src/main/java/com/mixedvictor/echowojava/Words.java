@@ -8,30 +8,35 @@
 package com.mixedvictor.echowojava;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.logging.Level;
 
-public class Utils {
+public class Words {
     private String[] uwus;
     private String[] common;
     private String[] uwuified;
 
-    public void loadDefaultJson() {
+    public Words() throws IOException {
         final URL fileJson = getClass().getClassLoader().getResource("default-words.json");
         if (fileJson != null) {
-            try (BufferedReader jBr = new BufferedReader(new InputStreamReader(fileJson.openStream()))) {
-                Utils words = new Gson().fromJson(jBr, Utils.class);
-                uwus = words.uwus;
-                common = words.common;
-                uwuified = words.uwuified;
-            } catch (IOException e) {
-                GlobalLogger.LOGGER.log(Level.SEVERE, "Error reading 'default-words.json'", e);
-            }
+            JsonObject jsonObject = new Gson().fromJson(new BufferedReader(new InputStreamReader(fileJson.openStream())), JsonObject.class);
+            uwus = jsonArrayToStringArray(jsonObject.getAsJsonArray("uwus"));
+            common = jsonArrayToStringArray(jsonObject.getAsJsonArray("common"));
+            uwuified = jsonArrayToStringArray(jsonObject.getAsJsonArray("uwuified"));
         }
+    }
+
+    private String[] jsonArrayToStringArray(JsonArray jsonArray) {
+        String[] stringArray = new String[jsonArray.size()];
+        for (int i = 0; i < jsonArray.size(); i++) {
+            stringArray[i] = jsonArray.get(i).getAsString();
+        }
+        return stringArray;
     }
 
     private int genInt(int max) {
@@ -39,7 +44,7 @@ public class Utils {
     }
 
     public String uwusAdd(String str) {
-        return(uwus[genInt(uwus.length)] + " " + str + " " + uwus[genInt(uwus.length)]);
+        return String.format("%s %s %s", uwus[genInt(uwus.length)], str, uwus[genInt(uwus.length)]);
     }
 
     public String uwuifyString(String str) {

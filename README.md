@@ -1,7 +1,7 @@
 # echowoJava
-joseafga's echowo, now in Java with UI, also comes with CLI.
+joseafga's echowo but with Java and libadwaita (using [java-gtk](https://github.com/bailuk/java-gtk)). Also comes with a CLI.
 
-**Compile:** `mvn clean package`<br>
+**Compile:** `mvn package`<br>
 **Arguments:**
 ```
 usage: echowoJava <string>

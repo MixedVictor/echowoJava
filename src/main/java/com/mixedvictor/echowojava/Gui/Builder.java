@@ -27,37 +27,20 @@ public class Builder {
 
     public Builder(Application app) throws AllocationError, IOException {
         Words words = new Words();
-        UiBuilder builder = UiBuilder.fromResource("/application.xml");
+        UiBuilder builder = UiBuilder.fromResource("/ui/application.xml");
+        UiBuilder menu_builder = UiBuilder.fromResource("/ui/menu.xml");
         ApplicationWindow window = new ApplicationWindow(builder.getObject("window"));
 
-        // Translate button
         Button translate_button = new Button(builder.getObject("translate_button"));
-//        translate_button.addCssClass("suggested-action");
-
-        // Clear button
         Button clear_button = new Button(builder.getObject("clear_button"));
-        clear_button.addCssClass("destructive-action");
-
-        // Copy button
-//        Button copy_button = new Button(builder.getObject("copy_button"));
-
-        // Paste button
-//        Button paste_button = new Button(builder.getObject("paste_button"));
-        clear_button.addCssClass("destructive-action");
-
-        // Toggle UwU's button
-        ToggleButton toggle_uwus = new ToggleButton(builder.getObject("toggle_uwus"));
-        toggle_uwus.onToggled(() -> uwuToggle = !uwuToggle);
-
-        // Menu stuff
+        // Button copy_button = new Button(builder.getObject("copy_button"));
+        // Button paste_button = new Button(builder.getObject("paste_button"));
         MenuButton menu_button = new MenuButton(builder.getObject("menu_button"));
-        menu_button.setMenuModel(new MenuModel(builder.getObject("menu_app")));
-
-        // Textview stuff
+        
         TextView edit_area = new TextView(builder.getObject("edit_area"));
         TextView translate_area = new TextView(builder.getObject("translate_area"));
-
-        // Toast stuff
+        TextBuffer buffer_translate = translate_area.getBuffer();
+        TextBuffer buffer_edit = edit_area.getBuffer();
         ToastOverlay toast_overlay = new ToastOverlay(builder.getObject("toast_overlay"));
 
         // Handling stuff
@@ -67,29 +50,23 @@ public class Builder {
         ActionHandler.setAccels(app, "app.about", "F1");
 
         ActionHandler.get(app, "about").onActivate(() -> new About(app));
+        ActionHandler.get(app, "translate_text").onActivate(() -> uwuifyBufferToTextView(buffer_edit, buffer_translate, toast_overlay, words));
+        ActionHandler.get(app, "clear_text").onActivate(() -> clearBuffer(buffer_edit));
+        // ActionHandler.get(app, "toggle_uwus").onToggle(app -> uwuToggle = !uwuToggle);
 
-        TextBuffer buffer_translate = translate_area.getBuffer();
-        TextBuffer buffer_edit = edit_area.getBuffer();
-
-        translate_button.onClicked(() -> uwuifyBufferToTextView(buffer_edit, buffer_translate, toast_overlay, words));
-        clear_button.onClicked(() -> clearBuffer(buffer_edit));
-//        copy_button.onClicked(() -> {
-//            buffer_translate.copyClipboard();
-//        });
+        menu_button.setMenuModel(new MenuModel(menu_builder.getObject("menu")));
 
         // CSS stuff
-        Separator spacer_start = new Separator(builder.getObject("spacer_start"));
-        Separator spacer_end = new Separator(builder.getObject("spacer_end"));
-        spacer_start.addCssClass("spacer");
-        spacer_end.addCssClass("spacer");
+        translate_button.addCssClass("suggested-action");
+        clear_button.addCssClass("destructive-action");
 
         window.addCssClass("devel");
-        window.setSizeRequest(640, 480);
         window.setApplication(app);
         window.present();
     }
 
-    private static void uwuifyBufferToTextView(TextBuffer buffer, TextBuffer field_buffer, ToastOverlay toast_overlay, Words words) {
+    private static void uwuifyBufferToTextView(TextBuffer buffer, TextBuffer field_buffer, ToastOverlay toast_overlay,
+            Words words) {
         buffer.getBounds(start, end);
         final String text = String.valueOf(buffer.getText(start, end, false));
 

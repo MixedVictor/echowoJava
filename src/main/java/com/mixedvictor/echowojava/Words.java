@@ -9,7 +9,9 @@ package com.mixedvictor.echowojava;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonIOException;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,10 +23,16 @@ public class Words {
     private String[] common;
     private String[] uwuified;
 
-    public Words() throws IOException {
+    public Words() {
         final URL fileJson = getClass().getClassLoader().getResource("default-words.json");
         if (fileJson != null) {
-            JsonObject jsonObject = new Gson().fromJson(new BufferedReader(new InputStreamReader(fileJson.openStream())), JsonObject.class);
+            JsonObject jsonObject = null;
+            try {
+                jsonObject = new Gson().fromJson(new BufferedReader(new InputStreamReader(fileJson.openStream())),
+                        JsonObject.class);
+            } catch (JsonSyntaxException | JsonIOException | IOException e) {
+                e.printStackTrace();
+            }
             uwus = jsonArrayToStringArray(jsonObject.getAsJsonArray("uwus"));
             common = jsonArrayToStringArray(jsonObject.getAsJsonArray("common"));
             uwuified = jsonArrayToStringArray(jsonObject.getAsJsonArray("uwuified"));

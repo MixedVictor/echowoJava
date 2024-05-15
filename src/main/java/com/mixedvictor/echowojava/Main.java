@@ -10,19 +10,18 @@ package com.mixedvictor.echowojava;
 import ch.bailu.gtk.adw.Application;
 import ch.bailu.gtk.gio.ApplicationFlags;
 import ch.bailu.gtk.type.Strs;
-import ch.bailu.gtk.type.exception.AllocationError;
-import com.mixedvictor.echowojava.Gui.Builder;
+
 import org.apache.commons.cli.*;
 
-import java.io.IOException;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Main {
     private static void printHelp(HelpFormatter formatter, Options options) {
         formatter.printHelp("echowoJava <string>", options);
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         Options options = new Options();
 
         options.addOption(new Option("h", "help", false, "show help"));
@@ -49,18 +48,12 @@ public class Main {
                 }
             } else {
                 final Application app = new Application("com.mixedvictor.echowoJava", ApplicationFlags.NON_UNIQUE);
-                app.onActivate(() -> {
-                    try {
-                        new Builder(app);
-                    } catch (AllocationError | IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
+                app.onActivate(() -> new AdwApp(app));
                 app.run(args.length, new Strs(args));
                 app.unref();
             }
         } catch (ParseException e) {
-            GlobalLogger.LOGGER.log(Level.WARNING, "Parsing error", e);
+            Logger.getLogger(Main.class.getName()).log(Level.WARNING, "Parsing error", e);
             printHelp(formatter, options);
         }
     }
